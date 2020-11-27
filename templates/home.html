@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Wolastoqey Number Game</title>
+  </head>
+  <body>
+    <h1>Wolastoqey Number Game</h1>
+    <p> What is {{ num_as_str }} </p>
+
+    <div class="form">
+      <label for="guessField">Enter a guess: </label><input type="text" id="guessField" class="guessField">
+      <input type="submit" value="Submit guess" class="guessSubmit">
+    </div>
+
+    <div class="resultParas">
+      <p class="guesses"></p>
+      <p class="lastResult"></p>
+    </div>
+
+    <script>
+      // Started from example here:
+      // https://developer.mozilla.org/en-US/docs/Learn/JavaScript/First_steps/A_first_splash
+
+      let theAnswer = {{ num }}
+      const guesses = document.querySelector('.guesses');
+      const lastResult = document.querySelector('.lastResult');
+      const guessSubmit = document.querySelector('.guessSubmit');
+      const guessField = document.querySelector('.guessField');
+      let guessCount = 1;
+      let resetButton;
+
+      function checkGuess() {
+          let userGuess = Number(guessField.value);
+          if (guessCount === 1) {
+              guesses.textContent = 'Previous guesses: ';
+          }
+
+          guesses.textContent += userGuess + ' ';
+
+          if (userGuess === theAnswer) {
+              lastResult.textContent = 'Kwoli kiseht!';
+              setGameOver();
+          } else {
+              if(userGuess < theAnswer) {
+                  lastResult.textContent = 'Last guess was too low!' ;
+              } else if(userGuess > theAnswer) {
+                  lastResult.textContent = 'Last guess was too high!';
+              }
+          }
+
+          guessCount++;
+          guessField.value = '';
+          guessField.focus();
+      }
+
+      guessSubmit.addEventListener('click', checkGuess);
+
+      function setGameOver() {
+          guessField.disabled = true;
+          guessSubmit.disabled = true;
+          resetButton = document.createElement('button');
+          resetButton.textContent = 'Start new game';
+          document.body.appendChild(resetButton);
+          resetButton.addEventListener('click', resetGame);
+      }
+
+      function resetGame() {
+          location.reload()
+      }
+    </script>
+  </body>
+</html>
