@@ -7,7 +7,10 @@
         <p>{{ num_as_str }}?</p>
 
         <div class="form">
-          <label for="guessField">Enter a guess (1&ndash;100): </label><input type="text" id="guessField" class="guessField">
+          <!-- <label for="guessField">Enter a guess (1&ndash;100): </label><input type="text" id="guessField" class="guessField"> -->
+          <label for="guessField">Enter a guess
+          (1&ndash;100): </label><input type="number"
+          inputmode="numeric" pattern="0-9*" id="guessField" class="guessField">
           <input type="submit" value="Submit" class="guessSubmit">
         </div>
 
