@@ -1,13 +1,16 @@
-from flask import Flask, render_template
+from flask import Flask, jsonify, render_template
 import wolastoqeynumbers, random
 app = Flask(__name__)
 
-
 @app.route('/')
 def home():
+    return render_template("home.html")
+
+@app.route("/getnum")
+def getnum():
     num = random.randint(1,100)
     num_as_str = wolastoqeynumbers.to_words(num)
-    return render_template("home.html", num=num, num_as_str=num_as_str)
+    return jsonify(num=num,num_as_str=num_as_str)
 
 @app.route('/about/')
 def about():
