@@ -14,8 +14,6 @@
         </div>
 
         <div class="resultParas" id="resultParas">
-          <!-- <p class="guesses"></p> -->
-          <!-- <p class="lastResult"></p> -->
         </div>
 
     <script>
@@ -61,7 +59,6 @@
               var node = document.createElement("p");
               var textnode = document.createTextNode("Kwoli kiseht! " + numAsStrPar.textContent + " is " + userGuess + ".");
               node.appendChild(textnode);
-              // resultParas.appendChild(node);
 
               resultParas.insertBefore(node, resultParas.firstChild);
 
@@ -78,13 +75,11 @@
                   var textnode = document.createTextNode(userGuess + ' is too low.');
                   node.appendChild(textnode);
                   resultParas.insertBefore(node, resultParas.firstChild);
-                  //resultParas.appendChild(node);
               } else if(userGuess > theAnswer) {
                   var node = document.createElement("p");
                   var textnode = document.createTextNode(userGuess + ' is too high.');
                   node.appendChild(textnode);
                   resultParas.insertBefore(node, resultParas.firstChild);
-                  // resultParas.appendChild(node);
               }
           }
 
