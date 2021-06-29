@@ -1,0 +1,122 @@
+{% extends 'template.html' %}
+
+{% block content %}
+
+        <h2>What number is this?</h2>
+
+        <p id="numPar"></p>
+
+        <div class="form">
+          <label for="guessField">Enter your answer
+          (1&ndash;10): </label><input id="guessField" class="guessField">
+          <input type="submit" value="Submit" class="guessSubmit">
+        </div>
+
+        <div class="resultParas" id="resultParas">
+        </div>
+
+    <script>
+
+      // Started from example here:
+      // https://developer.mozilla.org/en-US/docs/Learn/JavaScript/First_steps/A_first_splash
+
+      let theAnswer;
+      let numGuesses = 0;
+      let maxGuesses = 3;
+      const guessSubmit = document.querySelector('.guessSubmit');
+      const guessField = document.querySelector('.guessField');
+      const resultParas = document.getElementById('resultParas');
+      const numPar = document.getElementById('numPar');
+      let resetButton;
+
+      function getNumber() {
+          var request = new XMLHttpRequest();
+          request.addEventListener('load', updateNumber);
+          request.open('GET', {{ url_for('getnum10')|tojson }});
+          request.send();
+      }
+
+      function updateNumber() {
+          var data = JSON.parse(this.responseText);
+          theAnswer = data['num_as_str'];
+          numPar.textContent = data['num'];
+      }
+
+      getNumber();
+      guessField.value = '';
+
+      function checkGuess() {
+          let userGuess = guessField.value;
+          numGuesses = numGuesses + 1;
+
+          if (userGuess === theAnswer) {
+              var node = document.createElement("p");
+              var textnode = document.createTextNode("Kwoli kiseht! " + numPar.textContent + " is " + userGuess + ".");
+              node.appendChild(textnode);
+
+              resultParas.insertBefore(node, resultParas.firstChild);
+
+              // Get rid of the guesses so the play again button isn't
+              // somewhere far away...
+              while (resultParas.childNodes.length > 1) {
+                  resultParas.removeChild(resultParas.lastChild);
+              }
+              setGameOver();
+
+          } else {
+              var numGuessesLeft = maxGuesses - numGuesses;
+              if (numGuessesLeft > 0) {
+                  var node = document.createElement("p");
+                  var guessStr = "guesses";
+                  if (numGuessesLeft == 1) {
+                      guessStr = "guess";
+                  }
+                  var textnode = document.createTextNode(userGuess + ' is incorrect. ' + " (" + numGuessesLeft + " " + guessStr + " left)");
+                  node.appendChild(textnode);
+                  resultParas.insertBefore(node, resultParas.firstChild);
+              } else {
+                  var node = document.createElement("p");
+                  var textnode = document.createTextNode("Apc qeceht! " + numPar.textContent + " is " + theAnswer + ".");
+                  node.appendChild(textnode);
+                  resultParas.insertBefore(node, resultParas.firstChild);
+
+                  // Get rid of the guesses so the play again button isn't
+                  // somewhere far away...
+                  while (resultParas.childNodes.length > 1) {
+                      resultParas.removeChild(resultParas.lastChild);
+                  }
+                  setGameOver();
+              }
+          }
+
+          guessField.value = '';
+          guessField.focus();
+      }
+
+      guessSubmit.addEventListener('click', checkGuess);
+
+      guessField.addEventListener('keyup', function(event) {
+          if (event.keyCode == 13) {
+              guessSubmit.click();
+          }
+      });
+
+      function setGameOver() {
+          guessField.disabled = true;
+          guessSubmit.disabled = true;
+          resetButton = document.createElement('button');
+          resetButton.textContent = 'Play again';
+          document.getElementById('resultParas').appendChild(resetButton);
+          resetButton.addEventListener('click', resetGame);
+          resetButton.focus();
+      }
+
+      function resetGame() {
+          location.reload()
+      }
+
+
+
+    </script>
+
+{% endblock %}

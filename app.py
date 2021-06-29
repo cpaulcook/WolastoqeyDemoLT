@@ -6,9 +6,19 @@ app = Flask(__name__)
 def home():
     return render_template("home.html")
 
+@app.route('/gamev2/')
+def gamev2():
+    return render_template("home2.html")
+
 @app.route("/getnum")
 def getnum():
     num = random.randint(1,100)
+    num_as_str = wolastoqeynumbers.to_words(num)
+    return jsonify(num=num,num_as_str=num_as_str)
+
+@app.route("/getnum10")
+def getnum10():
+    num = random.randint(1,10)
     num_as_str = wolastoqeynumbers.to_words(num)
     return jsonify(num=num,num_as_str=num_as_str)
 
